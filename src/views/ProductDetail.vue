@@ -26,6 +26,7 @@
     <!-- Đường gạch thẳng đứng giữa hai cột -->
     <hr class="my-4">
   </div>
+  <Footer />
 </template>
 
 <script>

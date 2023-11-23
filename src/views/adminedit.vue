@@ -30,9 +30,9 @@
             <td>
               <div class="button-container">
                 <router-link :to="{ name: 'contact.edit', params: { id: product._id } }">
-                  <button class="edit">Edit</button>
+                  <button class="edit">Sửa</button>
                 </router-link>
-                <button @click="deleteProduct(product._id)" class="delete">Delete</button>
+                <button @click="deleteProduct(product._id)" class="delete">Xóa</button>
               </div>
             </td>
           </tr>

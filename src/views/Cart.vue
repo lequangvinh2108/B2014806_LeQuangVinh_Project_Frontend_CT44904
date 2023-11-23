@@ -31,7 +31,7 @@
                 </div>
               </td>
               <td class="center">{{ formatCurrency(calculateTotal(item)) }}</td>
-              <td class="center"><button @click="removeItem(item)">Remove</button></td>
+              <td class="center"><button @click="removeItem(item)">Xóa</button></td>
             </tr>
           </tbody>
         </table>
@@ -72,16 +72,20 @@
       <div v-else>
         <p>Your cart is empty.</p>
       </div>
+      
+      
     </div>
   </template>
 
   <script>
+  
   import CartService from "../services/cart.service";
   import OrderService from "../services/order.service";
   import _ from "lodash";
 
 
   export default {
+  
     data() {
       return {
         cart: { items: [] },
