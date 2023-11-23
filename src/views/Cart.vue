@@ -63,7 +63,7 @@
                 <label for="phone">Phone:</label>
                 <input type="text" id="phone" v-model="orderForm.phone" required>
               </div>
-              <button type="submit" class="red-button">Place Order</button>
+              <button type="submit" class="red-button">Đặt hàng</button>
             </form>
           </div>
         </div>

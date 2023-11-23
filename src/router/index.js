@@ -5,14 +5,13 @@ import ContactBook from "@/views/Product.vue";
 import NotFound from "@/views/NotFound.vue";
 import ProductEdit from "@/views/ProductEdit.vue";
 import ProductAdd from "@/views/ProductAdd.vue";
-import Payment from "@/views/Payment.vue";
 import ProductDetail from "@/views/ProductDetail.vue";
-import Checkout from "@/views/Checkout.vue";
-import Register from "@/views/Register.vue"; // Import Register component
-import Login from "@/views/Login.vue"; // Import Login component
-import AdminEdit from "@/views/AdminEdit.vue"; // Import AdminEdit component
+import Register from "@/views/Register.vue";
+import Login from "@/views/Login.vue";
+import AdminEdit from "@/views/AdminEdit.vue";
 import Cart from "@/views/Cart.vue";
 import OrderComponent from "@/views/Order.vue";
+import AdminUser from '@/views/AdminUser.vue';
 
 const routes = [{
         path: "/",
@@ -24,7 +23,11 @@ const routes = [{
         name: "cart",
         component: Cart,
     },
-    // router.js or where your routes are defined
+    {
+        path: '/adminuser',
+        name: 'AdminUser',
+        component: AdminUser,
+    },
     {
         path: '/order/userId/orderId',
         name: 'order',
@@ -61,7 +64,7 @@ const routes = [{
     },
 
     {
-        path: "/adminedit", // Define the route for AdminEdit
+        path: "/adminedit",
         name: "adminedit",
         component: AdminEdit,
     },
@@ -70,17 +73,7 @@ const routes = [{
         name: "notfound",
         component: NotFound,
     },
-    {
-        path: "/payment",
-        name: "payment",
-        component: Payment,
-    },
-    {
-        path: "/checkout",
-        name: "checkout",
-        component: Checkout,
-        props: true,
-    },
+
 ];
 
 const router = createRouter({

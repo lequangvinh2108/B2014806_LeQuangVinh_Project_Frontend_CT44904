@@ -1,3 +1,5 @@
+<!-- src/components/AppHeader.vue -->
+
 <template>
   <nav class="navbar navbar-expand navbar-dark bg-dark">
     <router-link v-if="!isLoginPage && !isRegisterPage" to="/contactbook" class="navbar-brand">Trang chủ</router-link>
@@ -11,13 +13,19 @@
 
     <!-- Nút Admin (ví dụ) -->
     <router-link v-if="$root.isAdmin" to="/adminedit" class="nav-link">
-      Admin
+      Edits
+    </router-link>
+     <!-- Nút Admin User -->
+     <router-link v-if="$root.isAdmin" to="/adminuser" class="nav-link">
+      Users
     </router-link>
 
     <!-- Nút Người dùng/Login -->
-    <router-link  to="/" class="nav-link">
+    <router-link to="/" class="nav-link">
       <i class="fas fa-user"></i>
     </router-link>
+
+   
 
     <!-- Nút Giỏ hàng -->
     <router-link v-if="!isLoginPage && !isRegisterPage" to="/cart" class="nav-link cart-link">
@@ -40,7 +48,6 @@ export default {
     isRegisterPage() {
       return this.$route.name === 'register';
     },
-    
   },
 };
 </script>
