@@ -10,7 +10,6 @@ import Register from "@/views/Register.vue";
 import Login from "@/views/Login.vue";
 import AdminEdit from "@/views/AdminEdit.vue";
 import Cart from "@/views/Cart.vue";
-// import OrderComponent from "@/views/Order.vue";
 import AdminUser from '@/views/AdminUser.vue';
 import AdminOrder from '@/views/AdminOrder.vue';
 
@@ -34,11 +33,6 @@ const routes = [{
         name: 'AdminOrder',
         component: AdminOrder,
     },
-    // {
-    //     path: '/order/userId/orderId',
-    //     name: 'order',
-    //     component: OrderComponent,
-    // },
 
     {
         path: "/contactbook",
