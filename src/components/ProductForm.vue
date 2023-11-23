@@ -54,7 +54,7 @@
     <ErrorMessage name="imgUrl" class="error-feedback" />
     </div>
     
-    <div class="form-group form-check">
+    <!-- <div class="form-group form-check">
     <input
     name="favorite"
     type="checkbox"
@@ -64,7 +64,7 @@
     <label for="favorite" class="form-check-label">
     <strong>Liên hệ yêu thích</strong>
     </label>
-    </div>
+    </div> -->
     <div class="form-group">
     <button class="btn btn-primary">Lưu</button>
     <button
