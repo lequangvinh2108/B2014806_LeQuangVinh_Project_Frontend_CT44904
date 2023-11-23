@@ -12,6 +12,7 @@ import AdminEdit from "@/views/AdminEdit.vue";
 import Cart from "@/views/Cart.vue";
 import OrderComponent from "@/views/Order.vue";
 import AdminUser from '@/views/AdminUser.vue';
+import AdminOrder from '@/views/AdminOrder.vue';
 
 const routes = [{
         path: "/",
@@ -27,6 +28,11 @@ const routes = [{
         path: '/adminuser',
         name: 'AdminUser',
         component: AdminUser,
+    },
+    {
+        path: '/adminorder',
+        name: 'AdminOrder',
+        component: AdminOrder,
     },
     {
         path: '/order/userId/orderId',

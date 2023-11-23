@@ -160,43 +160,28 @@
         return;
       }
 
-      console.log("Order Data:", userId, this.cart.items, this.orderForm.address, this.orderForm.name, this.orderForm.phone, this.calculateTotalSum());
-
       try {
-  const order = await OrderService.createOrder(
-    userId,
-    this.cart.items,
-    this.orderForm.address,
-    this.orderForm.name,
-    this.orderForm.phone,
-    this.calculateTotalSum()
-  );
-  console.log("Phản hồi đơn hàng:", order);
+        const order = await OrderService.createOrder(
+          userId,
+          this.cart.items,
+          this.orderForm.address,
+          this.orderForm.name,
+          this.orderForm.phone,
+          this.calculateTotalSum()
+        );
 
-  // Kiểm tra xem sau khi đặt hàng, giỏ hàng có bị xóa không
-  console.log("Giỏ hàng trước khi xóa:", this.cart);
+        // Xóa giỏ hàng sau khi đặt hàng
+        await CartService.clearCart(userId);
 
-  // Xóa giỏ hàng sau khi đặt hàng
-  try {
-    await CartService.clearCart(userId);
-  } catch (error) {
-    console.error("Lỗi khi xóa giỏ hàng:", error.message);
-  }
-
-  // Kiểm tra xem sau khi xóa giỏ hàng, giỏ hàng có trống không
-  console.log("Giỏ hàng sau khi xóa:", this.cart);
-
-  // Chuyển hướng người dùng đến trang chi tiết đơn hàng
-  this.$router.push({ name: 'order', params: { userId: order.userId, orderId: order._id } });
-} catch (error) {
-  console.error("Lỗi khi đặt hàng:", error.message);
-  this.closeOrderModal();
-  this.getCart();
-  // Chuyển hướng đến trang order.vue với userId của người dùng
-  this.$router.push({ name: 'order', params: { userId: userId, orderId: 'dummyOrderId' } });
-}
-
-
+        // Chuyển hướng người dùng đến trang sản phẩm
+        this.$router.push({ name: 'contactbook' });
+      } catch (error) {
+        console.error("Lỗi khi đặt hàng:", error.message);
+        this.closeOrderModal();
+        this.getCart();
+        // Chuyển hướng đến trang order.vue với userId của người dùng
+        // this.$router.push({ name: 'order', params: { userId: userId, orderId: 'dummyOrderId' } });
+      }
     },
 
 

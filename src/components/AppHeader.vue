@@ -19,6 +19,9 @@
      <router-link v-if="$root.isAdmin" to="/adminuser" class="nav-link">
       Users
     </router-link>
+    <router-link v-if="$root.isAdmin" to="/adminorder" class="nav-link">
+       Orders
+    </router-link>
 
     <!-- Nút Người dùng/Login -->
     <router-link to="/" class="nav-link">
