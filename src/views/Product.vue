@@ -1,5 +1,8 @@
 <template>
+  <h1 style="text-align: center;">Books Store</h1>
+  
   <div class="row">
+    
     <!-- Carousel Section -->
     <div class="mt-3">
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -59,7 +62,7 @@ export default {
     InputSearch,
     ProductList,
     Footer,
-    Cart, // Sử dụng component Cart
+    Cart, 
   },
   data() {
     return {
@@ -126,5 +129,5 @@ export default {
 </script>
 
 <style scoped>
-/* CSS styles cho component */
+
 </style>

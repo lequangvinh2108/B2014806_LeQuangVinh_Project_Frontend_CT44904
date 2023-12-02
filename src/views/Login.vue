@@ -1,30 +1,20 @@
 <template>
-  <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <h2 class="text-center mb-4">Đăng nhập</h2>
+  <div class="container d-flex justify-content-center">
+    <div class="mt-4 col-md-10 d-flex justify-content-center align-items-center">
+      <div class="w-75">
+        <h2 class="p-3 text-center">LOGIN</h2>
         <form @submit.prevent="login">
-          <div class="mb-3">
-            <label for="email" class="form-label">Email:</label>
-            <input type="email" id="email" v-model="email" class="form-control" required autocomplete="off" />
+          <label for="email-login">Email:</label>
+          <input id="email-login" class="form-control" v-model="email" type="email" required />
+          <br />
+          <label for="password-login">Password:</label>
+          <input id="password-login" class="form-control" v-model="password" type="password" required />
+          <span class="text-danger mt-1 mb-2" v-if="loginError">Thông tin đăng nhập sai</span>
+          <br />
+          <div class="d-flex align-items-end">
+            <button class="btn btn-secondary mt-2" type="submit">Login</button>&nbsp;&nbsp;&nbsp;
+            <p>Nếu chưa có tài khoản, <router-link to="/register">Đăng ký!</router-link></p>
           </div>
-
-          <div class="mb-3">
-            <label for="password" class="form-label">Mật khẩu:</label>
-            <input type="password" id="password" v-model="password" class="form-control" required autocomplete="off" />
-          </div>
-
-          <button type="submit" class="btn btn-primary">Đăng nhập</button>
-          
-          <!-- Hiển thị thông báo lỗi -->
-          <div v-if="error" class="alert alert-danger mt-3">
-            {{ error }}
-          </div>
-
-          <!-- Chữ Đăng Ký và chuyển hướng đến trang Register.vue -->
-          <p class="mt-3">
-            Nếu chưa có tài khoản, <router-link to="/register">Đăng ký</router-link> ngay!
-          </p>
         </form>
       </div>
     </div>
@@ -32,55 +22,44 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { RouterLink } from "vue-router";
+import UserService from "../services/user.service";
 
 export default {
   data() {
     return {
       email: "",
       password: "",
-      error: null,
+      loginError: false,
     };
   },
   methods: {
     async login() {
-      console.log("Login method is called!");
-
       try {
-        const response = await axios.post('http://localhost:3002/api/users/login', {
-          email: this.email,
-          password: this.password,
-        });
+        this.loginError = false;
+        const credentials = { email: this.email, password: this.password };
+        const response = await UserService.login(credentials);
 
-        if (response.data && response.data.user) {
-          console.log("Đăng nhập thành công!");
-          
-          const user = response.data.user;
+        const token = response.token;
+        const user = response.user;
+        localStorage.setItem("userId", user._id);
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(response.user));
 
-          // Lưu thông tin người dùng vào Local Storage
-          localStorage.setItem('user', JSON.stringify(user));
-          localStorage.setItem('userId', user._id);
+        console.log(response);
 
-          // Xác định xem người dùng có phải là admin không
-          this.$root.isAdmin = user.email === 'admin@gmail.com';
-
-        if (this.$root.isAdmin) {
-          // Chuyển hướng đến trang Product.vue nếu là admin
-          this.$router.push({ name: 'adminedit' });
+        if (user.isAdmin) {
+          this.$router.push("/adminedit");
         } else {
-          // Chuyển hướng đến trang ContactBook.vue nếu không phải là admin
-          this.$router.push({ name: 'contactbook' });
+          this.$router.push("/");
+          this.$root.$emit("userLoggedIn"); // Gửi sự kiện khi đăng nhập thành công
         }
- // Emit event to update header
- this.$root.$emit('login-success', { message: 'Đăng nhập thành công!' });
-      } else {
-        this.error = response.data.message || "Unknown error";
-      }
       } catch (error) {
-        console.error("Đăng nhập thất bại:", error.message || "Unknown error");
-        this.error = "Đăng nhập thất bại. Vui lòng thử lại.";
+        this.loginError = true;
+        console.error(error, "Sai");
       }
     },
   },
+  components: { RouterLink },
 };
 </script>

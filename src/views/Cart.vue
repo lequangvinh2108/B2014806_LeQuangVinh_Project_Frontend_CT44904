@@ -178,7 +178,7 @@
         await CartService.clearCart(userId);
 
         // Chuyển hướng người dùng đến trang sản phẩm
-        this.$router.push({ name: 'contactbook' });
+        this.$router.push({ name: 'order' });
       } catch (error) {
         console.error("Lỗi khi đặt hàng:", error.message);
         this.closeOrderModal();

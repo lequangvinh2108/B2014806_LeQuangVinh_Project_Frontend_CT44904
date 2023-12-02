@@ -9,20 +9,20 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Tên tài khoản</th>
+                <th>ID</th>
+                <th scope="col">Username</th>
                 <th scope="col">Email</th>
-                <th scope="col">Số điện thoại</th>
-                <th scope="col">Địa chỉ</th>
-                <th scope="col">Thao tác</th> <!-- Thêm cột cho nút xóa -->
+                <th scope="col">Password</th>
+                <th scope="col">Action</th> <!-- Thêm cột cho nút xóa -->
               </tr>
             </thead>
             <tbody>
               <tr v-for="(user, index) in users" :key="user._id">
                 <th scope="row">{{ index + 1 }}</th>
-                <td>{{ user.username }}</td>
+                <td>{{ user._id }}</td>
+                <td>{{ user.name }}</td>
                 <td>{{ user.email }}</td>
-                <td>{{ user.phone }}</td>
-                <td>{{ user.address }}</td>
+                <td>{{ user.password }}</td>
                 <td>
                   <button @click="deleteUser(user._id)" class="btn btn-danger">Xóa</button>
                 </td>
@@ -50,7 +50,7 @@ export default {
   methods: {
     async fetchUsers() {
       try {
-        const response = await axios.get('http://localhost:3002/api/users');
+        const response = await axios.get('http://localhost:3002/api/auth');
         if (response.data && response.data.users) {
           this.users = response.data.users;
         } else {
@@ -62,7 +62,7 @@ export default {
     },
     async deleteUser(userId) {
       try {
-        const response = await axios.delete(`http://localhost:3002/api/users/${userId}`);
+        const response = await axios.delete(`http://localhost:3002/api/auth/${userId}`);
         if (response.data && response.data.deletedUser) {
           // Xóa người dùng thành công, làm mới trang
           this.$router.go();
@@ -76,4 +76,30 @@ export default {
   },
 };
 </script>
+<style>
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th, td.center {
+    text-align: center;
+  }
+
+  .th.center {
+    text-align: center;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+</style>
   

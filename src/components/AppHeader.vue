@@ -1,57 +1,67 @@
-<!-- src/components/AppHeader.vue -->
-
 <template>
   <nav class="navbar navbar-expand navbar-dark bg-dark">
-    <router-link v-if="!isLoginPage && !isRegisterPage" to="/contactbook" class="navbar-brand">Trang chủ</router-link>
+    <router-link to="/" class="navbar-brand">Trang chủ</router-link>
+    <router-link to="/contact" class="navbar-brand">Liên hệ</router-link>
+    <router-link to="/introduce" class="navbar-brand">Giới thiệu</router-link>
+    <router-link to="/order" class="navbar-brand">Đơn hàng</router-link>
+    <router-link to="/useredit" class="navbar-brand"><i class="fas fa-cogs"></i></router-link>
     <div class="mr-auto navbar-nav">
-      <li class="nav-item">
-        <!-- Các liên kết khác nếu cần -->
-      </li>
+      <!-- Các mục menu khác nếu cần -->
     </div>
 
-    <!-- Hiển thị nút đăng nhập hoặc chữ đăng xuất tùy thuộc vào trạng thái đăng nhập -->
-
-    <!-- Nút Admin (ví dụ) -->
-    <router-link v-if="$root.isAdmin" to="/adminedit" class="nav-link">
+    <router-link v-if="isAdmin" to="/adminedit" class="nav-link">
       Edits
     </router-link>
-     <!-- Nút Admin User -->
-     <router-link v-if="$root.isAdmin" to="/adminuser" class="nav-link">
+  
+    <router-link v-if="isAdmin" to="/adminuser" class="nav-link">
       Users
     </router-link>
-    <router-link v-if="$root.isAdmin" to="/adminorder" class="nav-link">
-       Orders
+    
+    <router-link v-if="isAdmin" to="/adminorder" class="nav-link">
+      Orders
     </router-link>
 
-    <!-- Nút Người dùng/Login -->
-    <router-link to="/" class="nav-link">
+    <router-link v-if="!isLoggedIn" to="/login" class="nav-link">
+      <i class="fas fa-user"></i>
+    </router-link>
+    
+    <router-link v-else to="/" class="nav-link" @click="logout">
       <i class="fas fa-user"></i>
     </router-link>
 
-   
-
-    <!-- Nút Giỏ hàng -->
-    <router-link v-if="!isLoginPage && !isRegisterPage" to="/cart" class="nav-link cart-link">
+    <router-link to="/cart" class="nav-link cart-link">
       <i class="fas fa-shopping-cart"></i>
     </router-link>
   </nav>
 </template>
 
 <script>
+import router from '../router';
+
 export default {
-  data() {
-    return {
-      isAdmin: false,
-    };
-  },
-  computed: {
-    isLoginPage() {
-      return this.$route.name === 'login';
+    computed: {
+        // Sử dụng computed property để kiểm tra xem người dùng đã đăng nhập hay chưa
+        isLoggedIn() {
+            return localStorage.getItem("token") !== null;
+        },
+        // Sử dụng computed property để kiểm tra xem người dùng là admin hay không
+        isAdmin() {
+            const user = JSON.parse(localStorage.getItem("user"));
+            return user && user.isAdmin;
+        },
     },
-    isRegisterPage() {
-      return this.$route.name === 'register';
+    methods: {
+        // Phương thức xử lý đăng xuất
+        logout() {
+            // Xóa token và thông tin người dùng từ localStorage
+            localStorage.removeItem("token");
+            localStorage.removeItem("userId");
+            localStorage.removeItem("user");
+            // Chuyển hướng về trang login sau khi đăng xuất
+            this.$router.push("/login");
+        },
     },
-  },
+    components: { router }
 };
 </script>
 

@@ -33,9 +33,9 @@ export default {
                 this.message = "Sản phẩm được tạo thành công.";
                 // Hiển thị thông báo trong 3 giây trước khi chuyển hướng
                 setTimeout(() => {
-                    // Sau khi chờ 3 giây, chuyển hướng đến đường dẫn "contactbook"
-                    this.$router.push({ name: "contactbook" });
-                }, 3000);
+                    // Sau khi chờ 3 giây, chuyển hướng đến đường dẫn "product"
+                    this.$router.push({ name: "product" });
+                }, 2000);
             } catch (error) {
                 console.log(error);
             }

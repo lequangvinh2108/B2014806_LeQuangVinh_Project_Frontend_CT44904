@@ -16,7 +16,7 @@
   
           <!-- Cột 3: Liên hệ -->
           <div class="col-md-4">
-            <h5>Liên hệ</h5>
+            <h5><router-link to="/contact" class="navbar-brand">Liên hệ</router-link></h5>
             <div class="d-flex">
               <a href="#" class="me-2">
                 <i class="fab fa-facebook"></i>
