@@ -2,7 +2,7 @@
   <div class="container d-flex justify-content-center">
     <div class="mt-4 col-md-10 d-flex justify-content-center align-items-center">
       <div class="w-75">
-        <h2 class="p-3 text-center">LOGIN</h2>
+        <h2 class="p-3 text-center">Đăng nhập</h2>
         <form @submit.prevent="login">
           <label for="email-login">Email:</label>
           <input id="email-login" class="form-control" v-model="email" type="email" required />
