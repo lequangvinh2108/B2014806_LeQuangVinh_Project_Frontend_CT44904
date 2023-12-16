@@ -12,9 +12,9 @@
           <!-- Cột phải (thông tin) -->
           <div class="col-md-6">
             <h1>{{ product.name }}</h1>
-            <p><b>Price:</b> {{ product.price }}đ</p>
-            <p><b>Writer:</b> {{ product.writer }}</p>
-            <p><b>Description:</b> {{ product.description }}</p>
+            <p><b>Giá:</b> {{ product.price }}đ</p>
+            <p><b>Tác giả:</b> {{ product.writer }}</p>
+            <p><b>Mô tả:</b> {{ product.description }}</p>
             <!-- Thêm nút đặt hàng -->
             <button class="btn btn-primary" @click="orderProduct">Đặt hàng</button>
             <div class="notification" v-show="notificationMessage">{{ notificationMessage }}</div>

@@ -1,17 +1,17 @@
   <template>
     <div>
-      <h2>Shopping Cart</h2>
+      <h2 style="text-align: center;">Shopping Cart</h2>
 
       <div v-if="cart && cart.items && cart.items.length > 0">
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Image</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Total</th>
-              <th>Action</th>
+              <th>Tên sản phẩm</th>
+              <th>Hình ảnh</th>
+              <th>Giá</th>
+              <th>Số lượng</th>
+              <th>Tổng</th>
+              <th>Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -38,7 +38,7 @@
 
         <!-- Display total sum below the table -->
         <div class="total-sum">
-          <span>Total Sum:</span>
+          <span>Tổng giá:</span>
           <span>{{ formatCurrency(calculateTotalSum()) }}</span>
         </div>
         <button @click="openOrderModal">Đặt hàng ngay</button>
@@ -52,15 +52,15 @@
             <form @submit.prevent="submitOrder" class="modal-form">
               <h2 style="text-align: center;">Nhập thông tin khách hàng</h2>
               <div class="form-group">
-                <label for="name">Name:</label>
+                <label for="name">Tên:</label>
                 <input type="text" id="name" v-model="orderForm.name" required>
               </div>
               <div class="form-group">
-                <label for="address">Address:</label>
+                <label for="address">Địa chỉ:</label>
                 <input type="text" id="address" v-model="orderForm.address" required>
               </div>
               <div class="form-group">
-                <label for="phone">Phone:</label>
+                <label for="phone">Số điện thoại:</label>
                 <input type="text" id="phone" v-model="orderForm.phone" required>
               </div>
               <div class="form-group">
