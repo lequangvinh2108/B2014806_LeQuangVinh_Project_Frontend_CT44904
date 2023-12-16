@@ -63,6 +63,10 @@
                 <label for="phone">Phone:</label>
                 <input type="text" id="phone" v-model="orderForm.phone" required>
               </div>
+              <div class="form-group">
+                <label for="deliveryInstructions">Hướng dẫn giao hàng:</label>
+                <input id="deliveryInstructions" v-model="orderForm.deliveryInstructions">
+            </div>
               <button type="submit" class="red-button">Đặt hàng</button>
             </form>
           </div>
@@ -93,7 +97,8 @@
         orderForm: {
           name: "",
           address: "",
-          phone: ""
+          phone: "",
+          deliveryInstructions: "",
         },
       };
     },
@@ -171,7 +176,8 @@
           this.orderForm.address,
           this.orderForm.name,
           this.orderForm.phone,
-          this.calculateTotalSum()
+          this.calculateTotalSum(),
+          this.orderForm.deliveryInstructions
         );
 
         // Xóa giỏ hàng sau khi đặt hàng
@@ -183,8 +189,7 @@
         console.error("Lỗi khi đặt hàng:", error.message);
         this.closeOrderModal();
         this.getCart();
-        // Chuyển hướng đến trang order.vue với userId của người dùng
-        // this.$router.push({ name: 'order', params: { userId: userId, orderId: 'dummyOrderId' } });
+        
       }
     },
 

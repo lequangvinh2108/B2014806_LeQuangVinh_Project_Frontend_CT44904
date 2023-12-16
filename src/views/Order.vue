@@ -1,50 +1,54 @@
 <template>
-    <div>
-      <h2 class="text-center">Đơn Hàng của Bạn</h2>
-  
-      <div v-if="userOrders && userOrders.length > 0">
-        <div v-for="order in userOrders" :key="order._id" class="order-column">
-          <div>
-            <strong>Người Đặt:</strong> {{ order.name }}
-          </div>
-          <div>
-            <strong>ID:</strong> {{ order.userId }}
-          </div>
-          <div>
-            <strong>Mã Đơn Hàng:</strong> {{ order._id }}
-          </div>
-          <div>
-            <strong>Thông Tin Sản Phẩm:</strong>
-            <ul>
-              <li v-for="product in order.cart" :key="product._id">
-                <span>
-                  <img :src="product.product.imgUrl" alt="Product Image" class="product-image" />
-                </span>
-                <span>
-                  {{ product.product.name }} - {{ formatCurrency(product.product.price) }} (Số lượng: {{ product.quantity }})
-                </span>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <strong>Ngày Đặt Hàng:</strong> {{ formatDate(order.orderDate) }}
-          </div>
-          <div>
-            <strong>Tổng Tiền:</strong> {{ formatCurrency(order.totalMoney) }}
-          </div>
-          <div class="delete-btn-container">
-            <button class="delete-btn" @click="deleteOrder(order._id)">
-              Hủy đơn hàng
-            </button>
-          </div>
+  <div>
+    <h2 class="text-center">Đơn Hàng của Bạn</h2>
+
+    <div v-if="userOrders && userOrders.length > 0">
+      <div v-for="order in userOrders" :key="order._id" class="order-column">
+        <div>
+          <strong>Người Đặt:</strong> {{ order.name }}
+        </div>
+        <div>
+          <strong>ID:</strong> {{ order.userId }}
+        </div>
+        <div>
+          <strong>Mã Đơn Hàng:</strong> {{ order._id }}
+        </div>
+        <div>
+          <strong>Thông Tin Sản Phẩm:</strong>
+          <ul>
+            <li v-for="product in order.cart" :key="product._id">
+              <span>
+                <img :src="product.product.imgUrl" alt="Product Image" class="product-image" />
+              </span>
+              <span>
+                {{ product.product.name }} - {{ formatCurrency(product.product.price) }} (Số lượng: {{ product.quantity }})
+              </span>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <strong>Ngày Đặt Hàng:</strong> {{ formatDate(order.orderDate) }}
+        </div>
+        <div>
+          <strong>Tổng Tiền:</strong> {{ formatCurrency(order.totalMoney) }}
+        </div>
+        <!-- Hiển thị hướng dẫn giao hàng -->
+        <div>
+          <strong>Hướng Dẫn Giao Hàng:</strong> {{ order.deliveryInstructions }}
+        </div>
+        <div class="delete-btn-container">
+          <button class="delete-btn" @click="deleteOrder(order._id)">
+            Hủy đơn hàng
+          </button>
         </div>
       </div>
-  
-      <div v-else class="text-center">
-        <p>Bạn chưa có đơn hàng nào.</p>
-      </div>
     </div>
-  </template>
+
+    <div v-else class="text-center">
+      <p>Bạn chưa có đơn hàng nào.</p>
+    </div>
+  </div>
+</template>
   
   <script>
   import OrderService from "../services/order.service";

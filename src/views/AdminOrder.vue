@@ -9,6 +9,7 @@
           <th scope="col">Ngày đặt hàng</th>
           <th scope="col">Địa chỉ</th>
           <th scope="col">Số điện thoại</th>
+          <th scope="col">Hướng dẫn đặt hàng</th>
           <th scope="col">Tổng tiền</th>
           <th scope="col">Thao tác</th>
         </tr>
@@ -20,6 +21,7 @@
           <td>{{ formatOrderDate(order.orderDate) }}</td>
           <td>{{ order.address }}</td>
           <td>{{ order.phone }}</td>
+          <td>{{ order.deliveryInstructions }}</td>
           <td class="text-right">{{ formatCurrency(order.totalMoney) }}</td>
           <td>
             <button @click="deleteOrder(order._id)" class="btn btn-danger">Xóa</button>

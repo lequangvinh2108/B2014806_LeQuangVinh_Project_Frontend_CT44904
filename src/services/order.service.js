@@ -5,8 +5,8 @@ class OrderService {
         this.api = createApiClient(baseUrl);
     }
 
-    async createOrder(userId, cart, address, name, phone, totalMoney) {
-        const data = { userId, cart, address, name, phone, totalMoney };
+    async createOrder(userId, cart, address, name, phone, totalMoney, deliveryInstructions) {
+        const data = { userId, cart, address, name, phone, totalMoney, deliveryInstructions };
         return (await this.api.post("/createOrder", data)).data;
 
     }
