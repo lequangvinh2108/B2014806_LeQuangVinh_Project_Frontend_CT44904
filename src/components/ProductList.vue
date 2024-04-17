@@ -6,26 +6,18 @@
       :key="contact._id"
       :class="{ active: index === activeIndex }"
       @click="updateActiveIndex(index)"
+      style="background-color: aliceblue;"
     >
-      <div class="item-content">
+      <div class="item-content" @click="viewProductDetail(contact._id)">
         <img :src="contact.imgUrl" alt="Contact Image" />
       </div>
+      
       <div class="button-container">
-        <button @click="addToCart(contact)" class="themvaogiohang">Thêm vào giỏ</button>
-        <router-link
-          v-if="isLoggedIn"
-          :to="{ name: 'contact.detail', params: { id: contact._id } }"
-        >
-          <button class="xemchitiet">Xem chi tiết</button>
-        </router-link>
-        <router-link
-          v-else
-          to="/login"
-        >
-          <button class="xemchitiet">Xem chi tiết</button>
-        </router-link>
+        <button @click="addToCart(contact)" class="btn btn-danger">Thêm vào giỏ</button>
       </div>
+      
     </div>
+    
     <div class="notification" v-show="notificationMessage">{{ notificationMessage }}</div>
   </div>
 </template>
@@ -56,7 +48,7 @@ export default {
     localStorage.removeItem('userId');
     localStorage.removeItem('cart');
     // Thêm bất kỳ lưu trữ cục bộ khác bạn muốn xóa
-  },
+    },
     updateActiveIndex(index) {
       this.$emit("update:activeIndex", index);
     },
@@ -88,7 +80,10 @@ export default {
       } catch (error) {
         console.error(error);
       }
-    }
+    },
+    viewProductDetail(contactId) {
+      this.$router.push({ name: 'contact.detail', params: { id: contactId } });
+    },
   },
   mounted (){
     const sessionStarted = sessionStorage.getItem('sessionStarted');
@@ -105,6 +100,10 @@ export default {
 
 
 <style scoped>
+.item-content {
+  position: relative;
+  cursor: pointer; /* Đổi con trỏ chuột khi di chuột vào ảnh */
+}
 .page {
   text-align: left;
   max-width: 750px;
@@ -146,18 +145,13 @@ button {
 }
 
 /* Thêm style cho nút Đặt hàng */
-button.themvaogiohang {
-  background-color: #e74c3c; /* Màu đỏ */
+/* button.themvaogiohang {
+  background-color: #e74c3c; 
   color: #fff;
   width: 135px;
-}
+} */
 
-/* Thêm style cho nút Thanh toán */
-button.xemchitiet {
-  background-color: #3498db; /* Màu xanh đậm */
-  color: #fff;
-  width: 135px;
-}
+
 
 
 
@@ -173,6 +167,6 @@ button.xemchitiet {
 img {
   width: 100%;
   height: auto;
-  border: none; /* Remove the border around the image */
+  border: none;
 }
-</style>
+</style> 

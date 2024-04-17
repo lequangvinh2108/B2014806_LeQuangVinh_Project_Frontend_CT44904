@@ -50,7 +50,10 @@ export default {
 
         if (user.isAdmin) {
           this.$router.push("/adminedit");
-        } else {
+        } else if(user.isShipper){
+          this.$router.push("/ship");
+        }else {
+          
           this.$router.push("/");
           this.$root.$emit("userLoggedIn"); // Gửi sự kiện khi đăng nhập thành công
         }
@@ -58,8 +61,10 @@ export default {
         this.loginError = true;
         console.error(error, "Sai");
       }
+      
     },
   },
   components: { RouterLink },
+  
 };
 </script>

@@ -1,6 +1,6 @@
   <template>
     <div>
-      <h2 style="text-align: center;">Shopping Cart</h2>
+      <h2 style="text-align: center; font-style: italic;"><i class="fas fa-shopping-cart">Giỏ hàng</i></h2>
 
       <div v-if="cart && cart.items && cart.items.length > 0">
         <table>
@@ -18,7 +18,7 @@
             <tr v-for="(item, index) in cart.items" :key="index">
               <td class="center">{{ item.product.name }}</td>
               <td class="center"><img :src="item.product.imgUrl" alt="" style="width: 50px;"></td>
-              <td class="center">{{ formatCurrency(item.product.price) }}</td>
+              <td class="center">{{ formatCurrency(item.product.discountedPrice || item.product.price ) }}</td>
               <td class="center quantity-column">
                 <div class="quantity-container">
                   <button @click="decreaseQuantity(item)">
@@ -67,13 +67,40 @@
                 <label for="deliveryInstructions">Hướng dẫn giao hàng:</label>
                 <input id="deliveryInstructions" v-model="orderForm.deliveryInstructions">
             </div>
+            <!-- Chọn phương thức giao hàng -->
+            <div class="form-group">
+              <label for="deliveryMethod"><b>Chọn phương thức giao hàng:</b></label>
+              <select v-model="selectedDeliveryMethod" id="deliveryMethod">
+                <option v-for="method in deliveryMethods" :key="method.value" :value="method.value">
+                  {{ method.label }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Chọn phương thức thanh toán -->
+            <div class="form-group">
+              <label for="paymentMethod"><b>Chọn phương thức thanh toán:</b></label>
+              <select v-model="selectedPaymentMethod" id="paymentMethod">
+                <option v-for="method in paymentMethods" :key="method.value" :value="method.value">
+                  {{ method.label }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Hiển thị tổng tiền trong modal -->
+            <div class="form-group">
+              <label><b>Tổng tiền:</b></label>
+              <span>{{ formatCurrency(totalAmount) }}</span>
+            </div>
+            
+
               <button type="submit" class="red-button">Đặt hàng</button>
             </form>
           </div>
         </div>
       </div>
 
-      <div v-else>
+      <div v-else style="text-align: center;" >
         <p>Your cart is empty.</p>
       </div>
       
@@ -85,6 +112,8 @@
   
   import CartService from "../services/cart.service";
   import OrderService from "../services/order.service";
+  import ProductService from "../services/product.service";
+  import DiscountService from "../services/discount.service";
   import _ from "lodash";
 
 
@@ -100,25 +129,90 @@
           phone: "",
           deliveryInstructions: "",
         },
+        // Thêm dữ liệu cho phương thức giao hàng và thanh toán
+        deliveryMethods: [
+          { value: 'Giao hàng tiết kiệm', label: 'Giao hàng tiết kiệm (10,000 VND)' },
+          { value: 'Giao hàng nhanh', label: 'Giao hàng nhanh (15,000 VND)' }
+        ],
+        paymentMethods: [
+          { value: 'Khi nhận hàng', label: 'Thanh toán khi nhận hàng' },
+          { value: 'VNPay', label: 'VNPay' }
+        ],
+
+        selectedDeliveryMethod: 'Giao hàng tiết kiệm',
+        selectedPaymentMethod: 'Khi nhận hàng',
+
+        totalAmount: 0,
+
+        orderStatus: "Đã đặt",
       };
     },
     methods: {
       async getCart() {
-        const userId = localStorage.getItem("userId");
-        this.cart = await CartService.getCart(userId);
-      },
+      const userId = localStorage.getItem("userId");
+      this.cart = await CartService.getCart(userId);
+      // Áp dụng giảm giá cho các sản phẩm trong giỏ hàng
+      this.applyDiscountsToCartItems();
+    },
 
-      calculateTotal(item) {
-        return item.quantity * item.product.price;
-      },
+    async applyDiscountsToCartItems() {
+      for (const item of this.cart.items) {
+        await this.applyDiscountToCartItem(item);
+      }
+    },
 
-      calculateTotalSum() {
-        if (this.cart && this.cart.items) {
-          return this.cart.items.reduce((sum, item) => sum + this.calculateTotal(item), 0);
-        } else {
-          return 0;
+    async applyDiscountToCartItem(cartItem) {
+      try {
+        const productDiscount = await DiscountService.getDiscountByCode(cartItem.product.code);
+        if (productDiscount && productDiscount.discount) {
+          const discountPercent = productDiscount.discount;
+          const discountedPrice = cartItem.product.price - (cartItem.product.price * discountPercent / 100);
+          cartItem.product.discountedPrice = discountedPrice;
+          console.log("discountedPrice: ",discountedPrice);
         }
-      },
+      } catch (error) {
+        console.error("Error applying discount to cart item:", error);
+      }
+    },
+
+    calculateTotal(item) {
+  // Kiểm tra xem sản phẩm có giá đã giảm không
+  if (item.product.discountedPrice !== undefined && item.product.discountedPrice !== null) {
+    return item.quantity * item.product.discountedPrice;
+  } else {
+    // Nếu không, tính tổng dựa trên giá gốc của sản phẩm
+    return item.quantity * item.product.price;
+  }
+},
+
+calculateTotalSum() {
+  if (this.cart && this.cart.items) {
+    let productsTotal = 0;
+    // Lặp qua các sản phẩm trong giỏ hàng
+    this.cart.items.forEach(item => {
+      // Kiểm tra xem sản phẩm có giá đã giảm không
+      if (item.product.discountedPrice !== undefined && item.product.discountedPrice !== null) {
+        // Nếu có giá đã giảm, cộng tổng dựa trên giá đã giảm
+        productsTotal += item.quantity * item.product.discountedPrice;
+      } else {
+        // Nếu không, cộng tổng dựa trên giá gốc của sản phẩm
+        productsTotal += item.quantity * item.product.price;
+      }
+    });
+
+    // Tính phí giao hàng
+    const deliveryCost = this.selectedDeliveryMethod === 'Giao hàng tiết kiệm' ? 10000 : 15000;
+
+    // Tính tổng số tiền đặt hàng
+    this.totalAmount = productsTotal + deliveryCost;
+
+    return productsTotal;
+  } else {
+    this.totalAmount = 0;
+    return 0;
+  }
+},
+
 
       formatCurrency(value) {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
@@ -159,32 +253,56 @@
       async submitOrder() {
       const userId = localStorage.getItem("userId");
 
+      // Kiểm tra xem đã chọn phương thức giao hàng và thanh toán chưa
+      if (!this.selectedDeliveryMethod || !this.selectedPaymentMethod) {
+        console.error("Vui lòng chọn phương thức giao hàng và thanh toán.");
+        return;
+      }
+
       if (!this.orderForm.name || !this.orderForm.address || !this.orderForm.phone) {
-        console.error("Please fill in all required information.");
+        console.error("Vui lòng điền đầy đủ thông tin bắt buộc.");
         return;
       }
 
       if (!this.cart || !this.cart.items) {
-        console.error("Error placing order: Cart or cart items are undefined.");
+        console.error("Lỗi khi đặt hàng: Giỏ hàng hoặc sản phẩm trong giỏ hàng không xác định.");
         return;
       }
 
       try {
+
+        const productsTotal = this.calculateTotalSum();
+        const deliveryCost = this.selectedDeliveryMethod === 'Giao hàng tiết kiệm' ? 10000 : 15000;
+        const totalAmount = productsTotal + deliveryCost;
+
         const order = await OrderService.createOrder(
           userId,
           this.cart.items,
           this.orderForm.address,
           this.orderForm.name,
           this.orderForm.phone,
-          this.calculateTotalSum(),
-          this.orderForm.deliveryInstructions
+          totalAmount, 
+          // this.calculateTotalSum(),
+          this.orderForm.deliveryInstructions,
+          this.selectedDeliveryMethod, // Thêm phương thức giao hàng
+          this.selectedPaymentMethod ,// Thêm phương thức thanh toán
+          this.orderStatus,
         );
+
+        // Lấy danh sách sản phẩm trong giỏ hàng
+        const cartItems = this.cart.items;
+
+        // Cập nhật số lượng sản phẩm trong collection "products"
+        for (const item of cartItems) {
+          await ProductService.updateCode(item.product.code, { quantity: item.product.quantity - item.quantity });
+        }
 
         // Xóa giỏ hàng sau khi đặt hàng
         await CartService.clearCart(userId);
-
+        
         // Chuyển hướng người dùng đến trang sản phẩm
         this.$router.push({ name: 'order' });
+        
       } catch (error) {
         console.error("Lỗi khi đặt hàng:", error.message);
         this.closeOrderModal();
@@ -220,8 +338,8 @@
   }
 
   th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
+    border: 2px solid #0a0a0a;
+    padding: 10px;
     text-align: left;
   }
 
@@ -234,7 +352,11 @@
   }
 
   th {
-    background-color: #f2f2f2;
+    background-color: yellow;
+  }
+
+  td {
+   background-color: beige
   }
 
   button {
@@ -320,6 +442,16 @@
     border-radius: 4px;
     align-self: flex-start;
     margin-top: 10px;
+  }
+
+  /* Thêm style mới cho phương thức thanh toán */
+  .payment-method {
+    display: flex;
+    align-items: left;
+  }
+
+  .payment-method input {
+    margin-right: 5px; /* Điều chỉnh khoảng cách giữa nút radio và nhãn */
   }
 
   </style>

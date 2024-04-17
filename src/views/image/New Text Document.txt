@@ -1,0 +1,13 @@
+ <!-- <router-link
+          v-if="isLoggedIn"
+          :to="{ name: 'contact.detail', params: { id: contact._id } }"
+        >
+          <button class="xemchitiet">Xem chi tiết</button>
+        </router-link>
+        <router-link
+          v-else
+          to="/login"
+        >
+          <button class="xemchitiet">Xem chi tiết</button>
+        </router-link> -->
+

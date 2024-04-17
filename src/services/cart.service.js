@@ -10,6 +10,8 @@ class CartService {
         return (await this.api.post("/addToCart", data)).data;
     }
 
+
+
     async getCart(userId) {
         return (await this.api.post(`/getCart/${userId}`)).data;
     }

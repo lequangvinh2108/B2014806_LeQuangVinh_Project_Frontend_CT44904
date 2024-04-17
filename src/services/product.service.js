@@ -21,5 +21,19 @@ class ContactService {
     async delete(id) {
         return (await this.api.delete(`/${id}`)).data;
     }
+
+    async updateCode(code, data) {
+        return (await this.api.put(`/updateCode/${code}`, data)).data;
+    }
+
+    async getProductByCode(code) {
+        return (await this.api.get(`/findByCode/${code}`)).data;
+    }
+
+    async updateDiscount(code, data) {
+        return (await this.api.put(`/updateDiscount/${code}`, data)).data;
+    }
+
+
 }
 export default new ContactService();

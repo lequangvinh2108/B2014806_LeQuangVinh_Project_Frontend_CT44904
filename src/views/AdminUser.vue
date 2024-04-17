@@ -50,7 +50,7 @@ export default {
   methods: {
     async fetchUsers() {
       try {
-        const response = await axios.get('http://localhost:3002/api/auth');
+        const response = await axios.get('http://localhost:3000/api/auth');
         if (response.data && response.data.users) {
           this.users = response.data.users;
         } else {
@@ -62,7 +62,7 @@ export default {
     },
     async deleteUser(userId) {
       try {
-        const response = await axios.delete(`http://localhost:3002/api/auth/${userId}`);
+        const response = await axios.delete(`http://localhost:3000/api/auth/${userId}`);
         if (response.data && response.data.deletedUser) {
           // Xóa người dùng thành công, làm mới trang
           this.$router.go();

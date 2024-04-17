@@ -1,27 +1,32 @@
 <template>
     <div class="page">
-        <h4>Thêm sản phẩm mới</h4>
-        <ContactForm :contact="newContact" @submit:contact="createContact" />
+        <!-- <h4>Thêm sản phẩm mới</h4> -->
+        <ProductForm :contact="newContact" @submit:contact="createContact" />
         <p>{{ message }}</p>
     </div>
 </template>
 
 <script>
-import ContactForm from "@/components/ProductForm.vue";
-import ContactService from "@/services/product.service";
+import ProductForm from "@/components/ProductFormAdd.vue";
+import ListProductService from "@/services/listproduct.service";
+
 export default {
     components: {
-        ContactForm,
+        ProductForm,
     },
     data() {
         return {
             newContact: {
+                code: "",
                 name: "",
                 price: "",
-                writer: "",
-                description: "",
+                quantity: "",
+                mass: "",
                 imgUrl: "",
-                favorite: false,
+                description: "",
+                expiry: "",
+                importday: "",
+                placeproduction: "",
             },
             message: "",
         };
@@ -29,15 +34,16 @@ export default {
     methods: {
         async createContact(data) {
             try {
-                await ContactService.create(data);
+                await ListProductService.createProduct(data);
                 this.message = "Sản phẩm được tạo thành công.";
                 // Hiển thị thông báo trong 3 giây trước khi chuyển hướng
                 setTimeout(() => {
-                    // Sau khi chờ 3 giây, chuyển hướng đến đường dẫn "product"
-                    this.$router.push({ name: "product" });
-                }, 2000);
+                    // Sau khi chờ 3 giây, chuyển hướng đến đường dẫn "warehouse" (hoặc đường dẫn mà bạn muốn)
+                    this.$router.push({ name: "warehouse" });
+                }, 1000);
             } catch (error) {
-                console.log(error);
+                console.error("Error creating product:", error.message);
+                this.message = "Đã xảy ra lỗi khi tạo sản phẩm.";
             }
         },
     },

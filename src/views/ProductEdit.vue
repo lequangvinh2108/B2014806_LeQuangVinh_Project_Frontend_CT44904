@@ -1,69 +1,82 @@
 <template>
     <div v-if="contact" class="page">
-    <h4>Cập nhật sản phẩm</h4>
-    <ContactForm
-    :contact="contact"
-    @submit:contact="updateContact"
-    @delete:contact="deleteContact"
-    />
-    <p>{{ message }}</p>
+        <h4>Cập nhật sản phẩm</h4>
+        <ContactForm
+            :contact="contact"
+            @submit:contact="updateContact"
+            @delete:contact="deleteContact"
+        />
+        <p>{{ message }}</p>
     </div>
-    </template>
-    <script>
+</template>
+
+<script>
     import ContactForm from "@/components/ProductForm.vue";
-    import ContactService from "@/services/product.service";
-export default {
-components: {
-ContactForm,
-},
-props: {
-id: { type: String, required: true },
-},
-data() {
-return {
-contact: null,
-message: "",
-};
-},
-methods: {
-async getContact(id) {
-try {
-this.contact = await ContactService.get(id);
-} catch (error) {
-console.log(error);
-// Chuyển sang trang NotFound đồng thời giữ cho URL không đổi
-this.$router.push({
-name: "notfound",
-params: {
-pathMatch: this.$route.path.split("/").slice(1)
-},
-query: this.$route.query,
-hash: this.$route.hash,
-});
-}
-},
-async updateContact(data) {
-try {
-await ContactService.update(this.contact._id, data);
-this.message = "Liên hệ được cập nhật thành công.";
-} catch (error) {
-console.log(error);
-}
-},
-async deleteContact() {
-if (confirm("Bạn muốn xóa Liên hệ này?")) {
-try {
-await ContactService.delete(this.contact._id);
-this.$router.push({ name: "product" });
-} catch (error) {
-console.log(error);
-}
-}
-},
-},
-created() {
-this.getContact(this.id);
-this.message = "";
-},
-};
+    import ListProductService from "@/services/listproduct.service";
+
+    export default {
+        components: {
+            ContactForm,
+        },
+
+        props: {
+            id: { type: String, required: true },
+        },
+
+        data() {
+            return {
+                contact: null,
+                message: "",
+            };
+        },
+
+        methods: {
+            // Hàm lấy thông tin sản phẩm cần chỉnh sửa
+        async getContact(id) {
+            try {
+                this.contact = await ListProductService.getProduct(id);
+            } catch (error) {
+                console.error(error);
+                // Chuyển hướng sang trang NotFound nếu không tìm thấy sản phẩm
+                this.$router.push({
+                    name: "notfound",
+                    params: {
+                        pathMatch: this.$route.path.split("/").slice(1)
+                    },
+                    query: this.$route.query,
+                    hash: this.$route.hash,
+                });
+            }
+        },
+
+        // Hàm cập nhật thông tin sản phẩm
+        async updateContact(data) {
+            try {
+                await ListProductService.updateId(this.contact._id, data);
+                this.message = "Sản phẩm được cập nhật thành công.";
+                
+            } catch (error) {
+                console.error(error);
+                this.message = "Cập nhật sản phẩm không thành công.";
+            }
+        },
+
+            async deleteContact() {
+                if (confirm("Bạn muốn xóa sản phẩm này?")) {
+                    try {
+                        await ListProductService.deleteProduct(this.contact._id);
+                        this.$router.push({ name: "product" });
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            },
+        },
+
+        created() {
+            this.getContact(this.id);
+            this.message = "";
+            
+        },
+    };
 </script>

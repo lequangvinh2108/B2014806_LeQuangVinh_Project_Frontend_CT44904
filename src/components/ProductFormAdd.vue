@@ -1,6 +1,6 @@
 <template>
     <div class="product-form">
-      <h4>{{ isNewProduct ? 'Thêm sản phẩm mới' : 'Cập nhật thông tin sản phẩm' }}</h4>
+      <h4 style="text-align: center;">{{ isNewProduct ? 'Thêm sản phẩm mới' : 'Cập nhật thông tin sản phẩm' }}</h4>
       <form @submit.prevent="submitForm">
         <div class="form-group">
           <label for="code">Mã sản phẩm:</label>
@@ -11,12 +11,8 @@
           <input type="text" id="name" v-model="formData.name" required />
         </div>
         <div class="form-group">
-          <label for="price">Giá nhập:</label>
+          <label for="price">Giá:</label>
           <input type="number" id="price" v-model="formData.price" required />
-        </div>
-        <div class="form-group">
-          <label for="sellprice">Giá bán:</label>
-          <input type="number" id="sellprice" v-model="formData.sellprice" required />
         </div>
         <div class="form-group">
           <label for="quantity">Số lượng:</label>
@@ -34,19 +30,19 @@
           <label for="description">Mô tả:</label>
           <textarea id="description" v-model="formData.description"></textarea>
         </div>
-        <!-- <div class="form-group">
+        <div class="form-group">
           <label for="expiry">Hạn sử dụng:</label>
           <input type="date" id="expiry" v-model="formData.expiry" required />
-        </div> -->
-        <!-- <div class="form-group">
+        </div>
+        <div class="form-group">
           <label for="importday">Ngày nhập hàng:</label>
           <input type="date" id="importday" v-model="formData.importday" required />
-        </div> -->
-        <!-- <div class="form-group">
+        </div>
+        <div class="form-group">
           <label for="placeproduction">Nơi sản xuất:</label>
           <input type="text" id="placeproduction" v-model="formData.placeproduction" required />
-        </div> -->
-        <button type="submit" class="btn btn-sm btn-success">{{ isNewProduct ? 'Thêm sản phẩm' : 'Cập nhật' }}</button>
+        </div>
+        <button type="submit" class="btn btn-sm btn-success">Lưu</button>
         <button v-if="!isNewProduct" @click="deleteProduct" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Xóa sản phẩm</button>
       </form>
       <p>{{ message }}</p>
@@ -66,7 +62,6 @@
           code: this.contact ? this.contact.code : '',
           name: this.contact ? this.contact.name : '',
           price: this.contact ? this.contact.price : '',
-          sellprice: this.contact ? this.contact.sellprice: '',
           quantity: this.contact ? this.contact.quantity : '',
           mass: this.contact ? this.contact.mass : '',
           imgUrl: this.contact ? this.contact.imgUrl : '',
@@ -80,7 +75,7 @@
     },
     computed: {
       isNewProduct() {
-        return !this.contact;
+        return this.contact;
       },
     },
     methods: {

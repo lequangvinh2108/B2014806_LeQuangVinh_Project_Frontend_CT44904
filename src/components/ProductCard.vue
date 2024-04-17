@@ -12,19 +12,19 @@ contact: { type: Object, required: true },
 {{ contact.name }}
 </div>
 <div class="p-1">
-<strong>Price:</strong>
+<strong>Giá:</strong>
 {{ contact.price }}
 </div>
 <div class="p-1">
-<strong>Tác giả:</strong>
-{{ contact.writer }}
+<strong>Khối lượng:</strong>
+{{ contact.mass }}
 </div>
 <div class="p-1">
-<strong>Description:</strong>
+<strong>Mô tả:</strong>
 {{ contact.description }}
 </div>
 <div class="p-1">
-<strong>ImagUrl:</strong>
+<strong>Hình ảnh:</strong>
 {{ contact.imgUrl }}
 </div>
 <div class="p-1">

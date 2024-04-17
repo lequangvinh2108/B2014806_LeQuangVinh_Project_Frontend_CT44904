@@ -47,7 +47,7 @@ export default {
   methods: {
     async fetchOrders() {
       try {
-        const response = await axios.get('http://localhost:3002/api/orders/getAllOrders');
+        const response = await axios.get('http://localhost:3000/api/orders/getAllOrders');
         if (response.data && Array.isArray(response.data)) {
           this.orders = response.data;
         } else {
@@ -59,7 +59,7 @@ export default {
     },
     async deleteOrder(orderId) {
       try {
-        const response = await axios.delete(`http://localhost:3002/api/orders/deleteOrder/${orderId}`);
+        const response = await axios.delete(`http://localhost:3000/api/orders/deleteOrder/${orderId}`);
         if (response.data && response.data.success) {
           // Xóa thành công, làm mới trang
           this.fetchOrders();
